@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es2015",
+    ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "strict": true,
+    "strictFunctionTypes": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "downlevelIteration": true,
+    "declarationDir": "./lib",
+    "outDir": "lib",
+    "baseUrl": ".",
+    "paths": {
+      "exact-html": [
+        "src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "examples/**/*.ts",
+    "typings/*.ts"
+    // "test/**/*.ts"
+  ],
+  "exclude": [
+    "lib/*",
+    "node_modules/*"
+  ],
+  "compileOnSave": false
+}
