@@ -1,5 +1,6 @@
 import { HtmlTemplate } from '../core/HtmlTemplate';
 import { TemplateResult } from '../core/TemplateResult';
+import { ICtor, IPartParam } from '../interfaces/IPart';
 
 export abstract class Component<T extends object> {
 
@@ -7,9 +8,9 @@ export abstract class Component<T extends object> {
 
     }
 
-    private _templateResult!: TemplateResult;
+    _templateResult!: TemplateResult;
 
-    private _htmlTemplate!: HtmlTemplate;
+    _htmlTemplate!: HtmlTemplate;
 
     /**
      * 执行render获取新的TemplateResult进行转换和更新
@@ -20,6 +21,11 @@ export abstract class Component<T extends object> {
 
     appendTo(_el: Element): void {
         // todo
+    }
+
+    chrilrens<P extends object>(_ComponentCtor: ICtor<Component<P>>, props: P): IPartParam;
+    chrilrens(...args: any[]): IPartParam {
+        return {} as any;
     }
 
     abstract render(): TemplateResult;

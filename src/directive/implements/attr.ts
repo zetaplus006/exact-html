@@ -13,8 +13,11 @@ export class AttrDirective extends AttributeDirective {
     }
 
     update(attrName: string, attrValue: string): void {
-        if (this.attrName === attrName || this.attrValue === attrValue) {
+        if (this.attrName === attrName && this.attrValue === attrValue) {
             return;
+        }
+        if (this.attrName !== attrName) {
+            this.el.removeAttribute(this.attrName);
         }
         this.attrName = attrName;
         this.attrValue = attrValue;

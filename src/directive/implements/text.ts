@@ -14,7 +14,7 @@ export class TextDirective extends ElementDirective {
         this.updateDom();
     }
 
-    update(text: string): void {
+    update(text: any): void {
         if (this.text === text) {
             return;
         }

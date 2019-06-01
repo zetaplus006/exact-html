@@ -17,12 +17,11 @@ export abstract class BasePart {
     // value!: string | ITemplateResult; //
 
     // tslint:disable-next-line:no-empty
-    constructor(partParam: IAllPartParamTypes, index: number) {
+    constructor(index: number) {
         this.index = index;
-        this.setState(partParam);
     }
 
-    abstract setState(partParam: IAllPartParamTypes): void;
+    abstract init(partParam: IAllPartParamTypes, ...args: any[]): void;
 
     abstract update(partParam: IAllPartParamTypes): void;
 

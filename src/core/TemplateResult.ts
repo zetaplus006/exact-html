@@ -1,7 +1,8 @@
 import { isPrimitive, isUndef } from '../common/lang';
 import { IAllPartParamTypes } from '../interfaces/IPart';
 import { AttributePart } from '../part/AttrbutePart';
-import { TextPart } from '../part/TextPart';
+import { CommentPart } from '../part/CommentPart';
+import { ElementPart } from '../part/ElementPart';
 import { HtmlTemplate } from './HtmlTemplate';
 
 const marks: string[] = [];
@@ -53,17 +54,17 @@ export class TemplateResult {
         // todo
         const htmlTemplate = new HtmlTemplate();
         htmlTemplate.parts = [];
+        htmlTemplate.partParams = this.partParams;
         const templateElement = document.createElement('template');
+        htmlTemplate.templateElement = templateElement;
         templateElement.innerHTML = this.getHtmlString();
         // tslint:disable-next-line:no-console
         console.log(templateElement.content);
         const walker = document.createTreeWalker(templateElement.content, nodeFilters, null);
-        let el: Element | Text, currentIndex = 0;
+        let el: Element | Text | Comment, currentIndex = 0;
         const reomveEls = [];
         while (walker.nextNode()) {
             const { currentNode } = walker;
-            // tslint:disable-next-line:no-console
-            console.log(currentIndex, currentNode);
             currentIndex++;
             // 处理element
             if (currentNode.nodeType === 1) {
@@ -78,7 +79,7 @@ export class TemplateResult {
                     // tslint:disable-next-line:no-console
                     if (new RegExp(markReg, 'g').test(attr.name)) {
                         const index = getIndexByMark(attr.name);
-                        const attrPart = new AttributePart(this.partParams[index], index);
+                        const attrPart = new AttributePart(index);
                         attrPart.el = el;
                         htmlTemplate.parts[index] = attrPart;
                         attrArray.push(attr.name);
@@ -103,27 +104,45 @@ export class TemplateResult {
                     const r = res![i];
                     if (r) {
                         const index = getIndexByMark(r);
-                        const valParam = this.partParams[index];
-                        if (isPrimitive(valParam) || isUndef(valParam)) {
-                            const textPart = new TextPart(valParam as any, index);
-                            textPart.el = document.createTextNode('');
-                            parent.insertBefore(textPart.el, el);
-                            htmlTemplate.parts[index] = textPart;
-                        } else {
-                            // todo template/component
-                        }
+                        const elPart = new ElementPart(index);
+                        elPart.firstComment = new Comment('first_' + index);
+                        elPart.lastComment = new Comment('last_' + index);
+                        parent.insertBefore(elPart.firstComment, el);
+                        parent.insertBefore(elPart.lastComment, el);
+                        htmlTemplate.parts[index] = elPart;
                     }
                     i++;
                 }
                 reomveEls.push(el);
             } else if (currentNode.nodeType === 8) {
                 // todo
+                el = currentNode as Comment;
+                if (!el.data || !markReg.test(el.data)) {
+                    continue;
+                }
+                const res = el.data.match(markRegAll);
+                const strings = el.data.split(markSplitReg);
+                const len = strings.length;
+                let i = 0;
+                while (i < len) {
+                    const r = res![i];
+                    if (r) {
+                        const index = getIndexByMark(r);
+                        const commentPart = new CommentPart(index);
+                        commentPart.comment = el;
+                        commentPart.strings = strings;
+                        htmlTemplate.parts[index] = commentPart;
+                    }
+                    i++;
+                }
+                el.data = strings.join('');
             }
 
         }
         reomveEls.forEach(ele => ele.remove());
         // tslint:disable-next-line:no-console
-        console.log(htmlTemplate, currentIndex);
+        // console.log(htmlTemplate, currentIndex);
+        return htmlTemplate;
     }
 
 }
