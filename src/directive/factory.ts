@@ -1,9 +1,9 @@
 import { IAllPartParamTypes, ICtor } from '../interfaces/IPart';
+import { AttributeDirective } from './AttributeDirective';
 import { ElementDirective } from './ElementDirective';
-import { AttrDirective } from './implements/attr';
 import { DirectiveType } from './type';
 
-export type Directive = AttrDirective | ElementDirective;
+export type Directive = AttributeDirective | ElementDirective;
 
 export function defDirective(
     ctor: ICtor<Directive>,
@@ -21,7 +21,7 @@ export function defDirective(
 }
 
 function getDirectiveType(ctor: ICtor<Directive>): number {
-    return ctor.prototype instanceof AttrDirective
+    return ctor.prototype instanceof AttributeDirective
         ? DirectiveType.Attribute
         : ctor.prototype instanceof ElementDirective ? DirectiveType.Element : 0;
 }
