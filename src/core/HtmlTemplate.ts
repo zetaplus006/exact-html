@@ -10,7 +10,6 @@ export class HtmlTemplate {
 
     partParams!: IAllPartParamTypes[];
 
-
     init() {
         this.updateDom(true);
     }
