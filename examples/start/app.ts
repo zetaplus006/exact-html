@@ -1,15 +1,18 @@
-import { attr, click, html, on, style } from 'exact-html';
+import { attr, click, html, on, style, classes, show } from 'exact-html';
 // tslint:disable
 let name='test'
 let text = 'innertext'
-
+let isActive=false
 let styleObj:any={backgroundColor:'#3cbaff',fontSize:'16px'}
+let isShow=false
 
 const render =()=> html`
     <div ${on('click',(e: any)=>alert(JSON.stringify(e)))}>mouseenter</div>
     <button ${click(e=>alert('click'))} ${attr('test', 'test2'  )} ${attr('test2', 'test3'  )}>click</button>
     <div ${attr(name, text)}></div>
     <span sss  ${style(styleObj)}>ssss${text}bbb${text}</span>
+    <div ${classes({active:isActive})}>test classes</div>
+    <div ${show(isShow)}>test show</div>
     <span sss>ssss${text}bbb${text}</span>
     <!-- ss${true&&text}ss -->
 `;
@@ -30,6 +33,8 @@ setTimeout(() => {
     name='lee'
     text='change'
     styleObj=[Object.assign(styleObj,{color:'#fff',backgroundColor:'red'}),{height:'40px',display:'block'}]
+    isActive=true;
+    isShow=true;
     console.time('update')
     r.update(render().partParams);
     console.timeEnd('update')

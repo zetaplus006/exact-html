@@ -1,4 +1,3 @@
-import { noop } from '../../common/lang';
 import { AttributeDirective } from '../AttributeDirective';
 import { defDirective } from '../factory';
 
@@ -24,7 +23,9 @@ export class AttrDirective extends AttributeDirective {
         this.updateDom();
     }
 
-    unbind = noop;
+    unbind() {
+        this.el.removeAttribute(this.attrName);
+    }
 
     private updateDom() {
         this.el.setAttribute(this.attrName, this.attrValue);

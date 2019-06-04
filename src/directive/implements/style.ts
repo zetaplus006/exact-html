@@ -1,4 +1,5 @@
-import { hasOwn, noop } from '../../common/lang';
+import assign from 'object-assign'
+import { hasOwn } from '../../common/lang';
 import { IAllPartParamTypes, IPartParam } from '../../interfaces/IPart';
 import { AttributeDirective } from '../AttributeDirective';
 import { defDirective } from '../factory';
@@ -17,7 +18,6 @@ export default class StyleDirective extends AttributeDirective {
     }
 
     bind() {
-        // tslint:disable-next-line:no-shadowed-variable
         const cssStyle = this.el.style;
         const styleObj = this.styleObj;
         Object.keys(styleObj).forEach(key => cssStyle[key] = styleObj[key]);
@@ -27,12 +27,15 @@ export default class StyleDirective extends AttributeDirective {
         this.setStyle(styleObj);
     }
 
-    unbind = noop;
+    unbind() {
+        const cssStyle = this.el.style;
+        const styleObj = this.styleObj;
+        Object.keys(styleObj).forEach(key => cssStyle[key] = undefined);
+    }
 
     private setStyle(option: Partial<CSSStyleDeclaration>) {
         const oldStyleObj = this.styleObj;
         const styleObj = this.styleObj = getStyleObj(option);
-        // tslint:disable-next-line:no-shadowed-variable
         const cssStyle = this.el.style;
         let key: string;
         for (key in oldStyleObj) {
@@ -49,9 +52,9 @@ export default class StyleDirective extends AttributeDirective {
 
 function getStyleObj(option: styleOption) {
     if (Array.isArray(option)) {
-        return Object.assign({}, ...option.filter(Boolean));
+        return assign({}, ...option.filter(Boolean));
     } else {
-        return Object.assign({}, option || {});
+        return option || {};
     }
 }
 
