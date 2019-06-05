@@ -6,32 +6,43 @@ export class TextDirective extends ElementDirective {
 
     el!: Text;
 
-    constructor(private text: simpleType) {
+    constructor(private value: simpleType) {
         super();
     }
 
     bind() {
+        if (this.firstComment.nextSibling === this.lastComment) {
+            this.el = document.createTextNode('');
+            const parent = this.firstComment.parentNode;
+            if (parent) {
+                parent.insertBefore(this.el, this.lastComment);
+            } else {
+                throw new Error('found not parent');
+            }
+        }
         this.updateDom();
     }
 
     update(text: any): void {
-        if (this.text === text) {
+        if (this.value === text) {
             return;
         }
+        this.value = text;
         this.updateDom();
     }
 
-    unbind = noop;
+    unbind() {
+        this.el.remove();
+    }
 
     private updateDom() {
-        if (typeof this.text === 'string') {
-            this.el.textContent = this.text;
-        } else if (typeof this.text === 'number') {
-            this.el.textContent = String(this.text);
+        if (typeof this.value === 'string') {
+            this.el.textContent = this.value;
+        } else if (typeof this.value === 'number' || typeof this.value === 'symbol') {
+            this.el.textContent = String(this.value);
         } else {
             this.el.textContent = '';
         }
-
     }
 
 }

@@ -1,7 +1,7 @@
-import { attr, click, html, on, style, classes, show } from 'exact-html';
+import { attr, classes, click, html, on, show, style } from 'exact-html';
 // tslint:disable
 let name='test'
-let text = 'innertext'
+let text:any = 'text';
 let isActive=false
 let styleObj:any={backgroundColor:'#3cbaff',fontSize:'16px'}
 let isShow=false
@@ -13,7 +13,13 @@ const render =()=> html`
     <span sss  ${style(styleObj)}>ssss${text}bbb${text}</span>
     <div ${classes({active:isActive})}>test classes</div>
     <div ${show(isShow)}>test show</div>
-    <span sss>ssss${text}bbb${text}</span>
+    <span sss>ssss  ${text} bbb  ${text}</span>
+    <div>
+        ${
+            html`<div ${style(styleObj)}>template childs ${text}
+            </div>`
+        }
+    </div>
     <!-- ss${true&&text}ss -->
 `;
 console.time('1')
@@ -35,6 +41,7 @@ setTimeout(() => {
     styleObj=[Object.assign(styleObj,{color:'#fff',backgroundColor:'red'}),{height:'40px',display:'block'}]
     isActive=true;
     isShow=true;
+    text="text_change"
     console.time('update')
     r.update(render().partParams);
     console.timeEnd('update')

@@ -1,6 +1,6 @@
-import assign from 'object-assign'
+import assign from 'object-assign';
 import { hasOwn } from '../../common/lang';
-import { IAllPartParamTypes, IPartParam } from '../../interfaces/IPart';
+import { IAllPartParamTypes } from '../../interfaces/IPart';
 import { AttributeDirective } from '../AttributeDirective';
 import { defDirective } from '../factory';
 
@@ -54,7 +54,7 @@ function getStyleObj(option: styleOption) {
     if (Array.isArray(option)) {
         return assign({}, ...option.filter(Boolean));
     } else {
-        return option || {};
+        return Object.assign({}, option || {});
     }
 }
 
