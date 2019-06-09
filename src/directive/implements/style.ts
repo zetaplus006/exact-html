@@ -1,3 +1,4 @@
+import isequal from 'lodash.isequal';
 import assign from 'object-assign';
 import { hasOwn } from '../../common/lang';
 import { IAllPartParamTypes } from '../../interfaces/IPart';
@@ -23,8 +24,13 @@ export default class StyleDirective extends AttributeDirective {
         Object.keys(styleObj).forEach(key => cssStyle[key] = styleObj[key]);
     }
 
-    update(styleObj: Partial<CSSStyleDeclaration>) {
-        this.setStyle(styleObj);
+    update(option: styleOption) {
+        const newStyleObj = getStyleObj(option);
+        if (isequal(this.styleObj, newStyleObj)) {
+            this.styleObj = newStyleObj;
+            return;
+        }
+        this.setStyle(newStyleObj);
     }
 
     unbind() {
@@ -33,9 +39,9 @@ export default class StyleDirective extends AttributeDirective {
         Object.keys(styleObj).forEach(key => cssStyle[key] = undefined);
     }
 
-    private setStyle(option: Partial<CSSStyleDeclaration>) {
+    private setStyle(newStyleObj: Partial<CSSStyleDeclaration>) {
         const oldStyleObj = this.styleObj;
-        const styleObj = this.styleObj = getStyleObj(option);
+        const styleObj = this.styleObj = newStyleObj;
         const cssStyle = this.el.style;
         let key: string;
         for (key in oldStyleObj) {

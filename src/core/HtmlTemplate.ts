@@ -2,9 +2,10 @@ import { IAllPartParamTypes } from '../interfaces/IPart';
 import { BasePart } from '../part/BasePart';
 
 export class HtmlTemplate {
-    elements!: Element[];
 
     templateElement!: HTMLTemplateElement;
+
+    documentFragment!: DocumentFragment;
 
     parts!: BasePart[];
 
@@ -23,11 +24,17 @@ export class HtmlTemplate {
     }
 
     destroy(): void {
-        throw new Error('Method not implemented.');
+        const { parts } = this;
+        const len = parts.length;
+        let index = 0;
+        while (index < len) {
+            parts[index].destroy();
+            index++;
+        }
     }
 
-    appendTo(el: HTMLElement): void {
-        el.appendChild(this.templateElement.content);
+    appendTo(el: Element): void {
+        el.appendChild(this.documentFragment);
     }
 
     private updateDom(isInit: boolean) {
@@ -40,5 +47,4 @@ export class HtmlTemplate {
             index++;
         }
     }
-
 }

@@ -3,8 +3,6 @@ export abstract class ElementDirective {
 
     firstComment!: Comment;
 
-    els!: Element[];
-
     lastComment!: Comment;
 
     /** 拿到 el 后会调用一次 */
@@ -15,5 +13,12 @@ export abstract class ElementDirective {
 
     /** 销毁时调用 */
     abstract unbind(...arg: unknown[]): void;
+
+    protected removeAllNode() {
+        const { firstComment, lastComment } = this;
+        while (firstComment.nextSibling !== lastComment) {
+            firstComment.nextSibling!.remove();
+        }
+    }
 
 }

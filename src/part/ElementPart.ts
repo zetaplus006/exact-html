@@ -28,7 +28,7 @@ export class ElementPart extends BasePart {
     }
 
     destroy(): void {
-        // todo
+        this.directive.unbind();
     }
 
 }

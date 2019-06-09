@@ -6,6 +6,8 @@ let isActive=false
 let styleObj:any={backgroundColor:'#3cbaff',fontSize:'16px'}
 let isShow=false
 
+let changeTpl=true
+
 const render =()=> html`
     <div ${on('click',(e: any)=>alert(JSON.stringify(e)))}>mouseenter</div>
     <button ${click(e=>alert('click'))} ${attr('test', 'test2'  )} ${attr('test2', 'test3'  )}>click</button>
@@ -16,8 +18,10 @@ const render =()=> html`
     <span sss>ssss  ${text} bbb  ${text}</span>
     <div>
         ${
-            html`<div ${style(styleObj)}>template childs ${text}
+            changeTpl? html`<div ${style(styleObj)}>template childs ${text}
             </div>`
+            :
+            html`<div>change template</div>`
         }
     </div>
     <!-- ss${true&&text}ss -->
@@ -42,6 +46,7 @@ setTimeout(() => {
     isActive=true;
     isShow=true;
     text="text_change"
+    changeTpl=false;
     console.time('update')
     r.update(render().partParams);
     console.timeEnd('update')

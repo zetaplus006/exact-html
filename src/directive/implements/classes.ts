@@ -18,6 +18,7 @@ export class ClassesDirective extends AttributeDirective {
 
     update(option: IClassesOption) {
         if (isequal(this.option, option)) {
+            this.option = option;
             return;
         }
         this.option = option;

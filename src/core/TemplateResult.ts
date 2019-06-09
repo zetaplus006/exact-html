@@ -56,7 +56,7 @@ export class TemplateResult {
         htmlTemplate.parts = [];
         htmlTemplate.partParams = this.partParams;
         const templateElement = document.createElement('template');
-        htmlTemplate.templateElement = templateElement;
+        htmlTemplate.documentFragment = templateElement.content;
         templateElement.innerHTML = this.getHtmlString();
         // tslint:disable-next-line:no-console
         console.log(templateElement.content);

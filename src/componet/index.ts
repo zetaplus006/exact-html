@@ -4,23 +4,43 @@ import { ICtor, IPartParam } from '../interfaces/IPart';
 
 export abstract class Component<T extends object> {
 
-    constructor(public props: T) {
+    private _templateResult!: TemplateResult;
 
+    private _htmlTemplate!: HtmlTemplate;
+
+    constructor(public readonly props: T) {
     }
 
-    _templateResult!: TemplateResult;
-
-    _htmlTemplate!: HtmlTemplate;
+    private _init() {
+        this._templateResult = this.render();
+        this._htmlTemplate = this._templateResult.transformToHtmlTemplate();
+        this._htmlTemplate.init();
+    }
 
     /**
      * 执行render获取新的TemplateResult进行转换和更新
      */
     update() {
         // todo
+        const newRes = this.render();
+        if (newRes.templateArray !== this._templateResult.templateArray) {
+            this._destory();
+            this._templateResult = newRes;
+            this._init();
+        } else {
+            this._htmlTemplate.update(newRes.partParams);
+            this._templateResult.partParams = newRes.partParams;
+        }
+
     }
 
-    appendTo(_el: Element): void {
+    private _destory() {
+        this._htmlTemplate.destroy();
+    }
+
+    appendTo(el: Element): void {
         // todo
+        this._htmlTemplate.appendTo(el);
     }
 
     chrilrens<P extends object>(_ComponentCtor: ICtor<Component<P>>, props: P): IPartParam;
