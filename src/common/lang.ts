@@ -19,6 +19,10 @@ export function isPrimitive(value: any): boolean {
     );
 }
 
+export function isSimpleType(value: any): boolean {
+    return isPrimitive(value) || isUndef(value);
+}
+
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 export function hasOwn(o: any, key: string | number): boolean {
     return hasOwnProperty.call(o, key);

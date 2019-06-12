@@ -1,8 +1,17 @@
-import { App, Component, html } from 'exact-html';
+import { App, child, Component, html ,on} from 'exact-html';
+
+class Test extends Component<{ num: number }> {
+
+    render() {
+        return html`<div>${this.props.num}</div>`;
+    }
+}
 
 class Counter extends Component<any> {
 
     num = 0;
+
+    isShowChild = true;
 
     constructor(props: any) {
         super(props);
@@ -10,6 +19,9 @@ class Counter extends Component<any> {
             this.num++;
             this.update();
         }, 1000);
+        setTimeout(() => {
+            this.isShowChild = false;
+        }, 3000);
     }
 
     render() {
@@ -18,10 +30,8 @@ class Counter extends Component<any> {
                 ${this.num}
             </div>
             <div>
-                ${this.num}
-            </div>
-            <div>
-                ${this.num}
+                ${this.isShowChild && child(Test, { num: this.num })
+                    || html`<span>over</span>`}
             </div>
        `;
     }

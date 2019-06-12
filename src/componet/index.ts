@@ -17,6 +17,10 @@ export abstract class Component<T extends object> {
         this._htmlTemplate.init();
     }
 
+    receiveProps(_oldProps: any) {
+        this.update();
+    }
+
     /**
      * 执行render获取新的TemplateResult进行转换和更新
      */
@@ -41,11 +45,6 @@ export abstract class Component<T extends object> {
     appendTo(el: Element): void {
         // todo
         this._htmlTemplate.appendTo(el);
-    }
-
-    chrilrens<P extends object>(_ComponentCtor: ICtor<Component<P>>, props: P): IPartParam;
-    chrilrens(...args: any[]): IPartParam {
-        return {} as any;
     }
 
     abstract render(): TemplateResult;

@@ -37,6 +37,10 @@ export class HtmlTemplate {
         el.appendChild(this.documentFragment);
     }
 
+    insertBefore(el: Comment | Node) {
+        el.parentNode!.insertBefore(this.documentFragment, el);
+    }
+
     private updateDom(isInit: boolean) {
         const { parts, partParams } = this;
         const method = isInit ? 'init' : 'update';
