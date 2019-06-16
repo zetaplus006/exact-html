@@ -4,28 +4,35 @@ import { ICtor, IPartParam } from '../interfaces/IPart';
 
 export abstract class Component<T extends object> {
 
-    private _templateResult!: TemplateResult;
+    _templateResult!: TemplateResult;
 
-    private _htmlTemplate!: HtmlTemplate;
+    _htmlTemplate!: HtmlTemplate;
+
+    _isInit = true;
 
     constructor(public readonly props: T) {
     }
 
-    private _init() {
-        this._templateResult = this.render();
-        this._htmlTemplate = this._templateResult.transformToHtmlTemplate();
-        this._htmlTemplate.init();
+    _init() {
+        this._isInit = true;
+        this.update();
     }
 
-    receiveProps(_oldProps: any) {
-        this.update();
+    shouldUpdate(_prevProps: T) {
+        return true;
     }
 
     /**
      * 执行render获取新的TemplateResult进行转换和更新
      */
     update() {
-        // todo
+        if (this._isInit) {
+            this._templateResult = this.render();
+            this._htmlTemplate = this._templateResult.transformToHtmlTemplate();
+            this._htmlTemplate.init();
+            this._isInit = false;
+            return;
+        }
         const newRes = this.render();
         if (newRes.templateArray !== this._templateResult.templateArray) {
             this._destory();
@@ -38,7 +45,7 @@ export abstract class Component<T extends object> {
 
     }
 
-    private _destory() {
+    _destory() {
         this._htmlTemplate.destroy();
     }
 

@@ -3,6 +3,7 @@ import { HtmlTemplate } from '../core/HtmlTemplate';
 import { TemplateResult } from '../core/TemplateResult';
 import { ElementDirective } from '../directive/ElementDirective';
 import { ComponentDirective } from '../directive/implements/component';
+import { MapDirective } from '../directive/implements/map';
 import { TemplateDirective } from '../directive/implements/template';
 import { TextDirective } from '../directive/implements/text';
 import { IAllPartParamTypes, IPartParam } from '../interfaces/IPart';
@@ -31,7 +32,7 @@ function getElementDirective(part: ElementPart, param: IAllPartParamTypes, value
         directive = new TemplateDirective(param as TemplateResult);
     } else if (valueType === 'component') {
         const p = param as IPartParam;
-        directive = new param!['ctor'](p.valueArgs[0], p.valueArgs[1]);
+        directive = new param!['ctor'](...p.valueArgs);
     } else {
         throw new Error('element directive is not found');
     }

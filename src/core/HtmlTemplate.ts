@@ -15,9 +15,6 @@ export class HtmlTemplate {
         this.updateDom(true);
     }
 
-    /**
-     * part的类型可能会变，需要转换成其他part
-     */
     update(partParams: IAllPartParamTypes[]): void {
         this.partParams = partParams;
         this.updateDom(false);

@@ -5,7 +5,8 @@ import { ICtor } from '../../interfaces/IPart';
 import { ElementDirective } from '../ElementDirective';
 import { defDirective } from '../factory';
 
-type LifeCycleName = 'created' | 'beforeMounte' | 'mounted' | 'beforeDestroy' | 'destroyed';
+type LifeCycleName = 'created' | 'beforeMounte' | 'mounted' | 'receiveProps'
+    | 'beforeUpdate' | 'updated' | 'beforeDestroy' | 'destroyed' | 'effect';
 
 function applyLifeCycle(instance: Component<any>, method: LifeCycleName, args?: any[]) {
     const func = instance[method];
@@ -18,17 +19,21 @@ export class ComponentDirective extends ElementDirective {
 
     instance!: Component<any>;
 
+
     constructor(private ctor: ICtor<Component<any>>, private props: any) {
         super();
     }
 
+    private effectResult!: any;
+
     bind(): void {
         this.instance = new this.ctor(this.props);
-        this.instance['_init']();
+        this.instance._init();
         applyLifeCycle(this.instance, 'created');
         applyLifeCycle(this.instance, 'beforeMounte');
-        this.instance['_htmlTemplate'].insertBefore(this.lastComment);
+        this.instance._htmlTemplate.insertBefore(this.lastComment);
         applyLifeCycle(this.instance, 'mounted');
+        this.effectResult = applyLifeCycle(this.instance, 'effect');
     }
     update(ctor: ICtor<Component<any>>, props: any): void {
         if (this.ctor !== ctor) {
@@ -37,10 +42,20 @@ export class ComponentDirective extends ElementDirective {
             this.bind();
             // todo
         } else {
-            // 这里不做更新判断，组件决定是否更新
-            const oldProps = this.props;
+            // 这里不做更新判断，组件自己决定是否更新
+            const prevProps = this.props;
             assign(this.instance.props, props);
-            this.instance.receiveProps(oldProps);
+            applyLifeCycle(this.instance, 'receiveProps', [prevProps]);
+            const shouldUpdate = this.instance.shouldUpdate(prevProps);
+            if (shouldUpdate) {
+                applyLifeCycle(this.instance, 'beforeUpdate');
+                this.instance.update();
+                applyLifeCycle(this.instance, 'updated');
+                if (typeof this.effectResult === 'function') {
+                    this.effectResult.call(null);
+                }
+                this.effectResult = applyLifeCycle(this.instance, 'effect');
+            }
         }
     }
     unbind(): void {
@@ -48,6 +63,9 @@ export class ComponentDirective extends ElementDirective {
         this.instance['_destory']();
         this.removeAllNode();
         applyLifeCycle(this.instance, 'destroyed');
+        if (typeof this.effectResult === 'function') {
+            this.effectResult.call(null);
+        }
     }
 
 }

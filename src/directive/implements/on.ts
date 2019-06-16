@@ -48,5 +48,5 @@ export const click = <K extends keyof HTMLElementEventMap>(
     listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions
 ) => {
-    return on('click', listener, options);
+    return on('click', listener as any, options);
 };

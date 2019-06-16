@@ -9,3 +9,4 @@ export { on, click } from './directive/implements/on';
 export { attr } from './directive/implements/attr';
 export { show } from './directive/implements/show';
 export { child } from './directive/implements/component';
+export { map } from './directive/implements/map';
