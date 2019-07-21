@@ -3,6 +3,8 @@ import { TemplateResult } from './TemplateResult';
 
 const templateMap = new Map<TemplateStringsArray, TemplateStringsArray>();
 
+const needMin = false;
+
 function getTinyTemplate(templateArray: TemplateStringsArray): TemplateStringsArray {
      if (!templateMap.has(templateArray)) {
           const tinyTemplate = templateArray.map(item => item.replace(/\n\s+/g, ' '));
@@ -21,5 +23,5 @@ function getTinyTemplate(templateArray: TemplateStringsArray): TemplateStringsAr
 }
 
 export function html(templateArray: TemplateStringsArray, ...partParams: IAllPartParamTypes[]): TemplateResult {
-     return new TemplateResult(getTinyTemplate(templateArray), partParams);
+     return new TemplateResult(needMin ? getTinyTemplate(templateArray) : templateArray, partParams);
 }

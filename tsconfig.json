@@ -5,7 +5,7 @@
       "dom",
       "es2015",
     ],
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "strict": true,
@@ -19,6 +19,7 @@
     "declarationDir": "./lib",
     "outDir": "lib",
     "baseUrl": ".",
+    "sourceMap": true,
     "paths": {
       "exact-html": [
         "src/index.ts"
@@ -28,8 +29,8 @@
   "include": [
     "src/**/*.ts",
     "examples/**/*.ts",
-    "typings/*.ts"
-    // "test/**/*.ts"
+    "typings/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": [
     "lib/*",

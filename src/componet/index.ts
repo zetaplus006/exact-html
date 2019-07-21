@@ -1,3 +1,4 @@
+import { isSever } from '../common/env';
 import { HtmlTemplate } from '../core/HtmlTemplate';
 import { TemplateResult } from '../core/TemplateResult';
 import { ICtor, IPartParam } from '../interfaces/IPart';
@@ -55,4 +56,10 @@ export abstract class Component<T extends object> {
     }
 
     abstract render(): TemplateResult;
+}
+
+if (isSever) {
+    Component.prototype._init = function () {
+        this._templateResult = this.render();
+    };
 }

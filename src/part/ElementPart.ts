@@ -9,9 +9,9 @@ import { TextDirective } from '../directive/implements/text';
 import { IAllPartParamTypes, IPartParam } from '../interfaces/IPart';
 import { BasePart } from './BasePart';
 
-type ValueType = 'simple' | 'template' | 'component' | 'unknow';
+export type ValueType = 'simple' | 'template' | 'component' | 'unknow';
 
-function getValueType(val: any): ValueType {
+export function getValueType(val: any): ValueType {
     if (isSimpleType(val)) {
         return 'simple';
     } else if (val instanceof TemplateResult) {

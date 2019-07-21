@@ -36,13 +36,17 @@ export class TextDirective extends ElementDirective {
     }
 
     private updateDom() {
-        if (typeof this.value === 'string') {
-            this.el.textContent = this.value;
-        } else if (typeof this.value === 'number' || typeof this.value === 'symbol') {
-            this.el.textContent = String(this.value);
-        } else {
-            this.el.textContent = '';
-        }
+        this.el.textContent = getSimpleTypeString(this.value);
     }
 
+}
+
+export function getSimpleTypeString(value: simpleType) {
+    if (typeof value === 'string') {
+        return value;
+    } else if (typeof value === 'number' || typeof value === 'symbol') {
+        return String(value);
+    } else {
+        return '';
+    }
 }

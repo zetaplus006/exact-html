@@ -1,3 +1,4 @@
+import { isSever } from '../common/env';
 import { isPrimitive, isUndef } from '../common/lang';
 import { IAllPartParamTypes } from '../interfaces/IPart';
 import { AttributePart } from '../part/AttrbutePart';
@@ -22,7 +23,7 @@ const markReg = /\$\$exact_mark_([0-9]+)_\$\$/;
 const markRegAll = new RegExp(markReg, 'g');
 // const markRegAll = /\$\$exact_mark_([0-9]+)_\$\$/g;
 const markSplitReg = /\$\$exact_mark_[0-9]+_\$\$/;
-const nodeFilters = NodeFilter.SHOW_ELEMENT + NodeFilter.SHOW_TEXT + NodeFilter.SHOW_COMMENT;
+const nodeFilters = isSever ? 0 : NodeFilter.SHOW_ELEMENT + NodeFilter.SHOW_TEXT + NodeFilter.SHOW_COMMENT;
 
 export class TemplateResult {
 

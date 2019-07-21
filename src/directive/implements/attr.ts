@@ -34,5 +34,5 @@ export class AttrDirective extends AttributeDirective {
 }
 
 export const attr = defDirective(AttrDirective, (attrName: string, attrValue: string) => {
-    return `${attrName}=${attrValue}`;
+    return `${attrName}="${attrValue}"`;
 });

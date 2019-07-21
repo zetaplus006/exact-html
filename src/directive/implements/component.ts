@@ -44,7 +44,7 @@ export class ComponentDirective extends ElementDirective {
         } else {
             // 这里不做更新判断，组件自己决定是否更新
             const prevProps = this.props;
-            assign(this.instance.props, props);
+            assign(this.instance.props, props); // todo
             applyLifeCycle(this.instance, 'receiveProps', [prevProps]);
             const shouldUpdate = this.instance.shouldUpdate(prevProps);
             if (shouldUpdate) {
